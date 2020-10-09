@@ -68,7 +68,6 @@ int LinearSearch(int key, City arrayCity[], int size)
     int i, index;
 
     index = -1;
-    LoadData(arrayCity);
     for(i=0; i<size; i++){
         if(key == arrayCity[i].id){
             index = i;
@@ -87,7 +86,6 @@ int BinarySearch(int key, City arrayCity[], int left, int right)
     index = -1;
     left = 0;
     right = MAX_CITY - 1;
-    LoadData(arrayCity);
     while(left <= right){
         pos = left + (right - left) / 2;
         if(key < arrayCity[pos].id){
