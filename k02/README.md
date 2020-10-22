@@ -61,12 +61,12 @@ typedef struct {
 
     (2) SearchCityByName: 市町村を名称で検索する(5点)  
     [入力]
-    - int key: 検索する市町村のID
-    - City arrayCity: 検索対象の都市別人口データ(配列)
-    - int size: データの数  
+    - Node* pList: リストの先頭アドレス
+    - char* cityname: 検索する市町村の名前
 
     [出力]  
-    - return値: IDが合致した配列データのindex。IDが一致するデータがない場合は-1。
+    - return値: IDが合致した場所(先頭を0とする)。IDが一致するデータがない場合は-1。
+    - City* pCity: IDが合致した市町村のデータを入れる
 
 ## ソースコードの説明
 
