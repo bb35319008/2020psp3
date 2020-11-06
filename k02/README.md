@@ -135,7 +135,7 @@ CHALLENGE2を有効にしてください。
 
 131: pNode に pList を代入
 
-132~139: n を0とし、pNode->pnext が NULL でない限り繰り返し実行し、n に1を加える
+132~139: n を0とし、n+1 が MAX_CITY より小さい限り繰り返し実行し、n に1を加える
 
 133~136: pNode->city.name と cityName を比較し、一致したときは実行
 
@@ -155,7 +155,7 @@ CHALLENGE2を有効にしてください。
 
 152: pNode に pList を代入
 
-153~160: c を0とし、pNode->pNext が NULL でない限り繰り返し実行し、c に1を加える
+153~160: c を0とし、c+1 が MAX_CITY より小さい限り繰り返し実行し、c に1を加える
 
 154~157: pNode->city.id が ID と等しいとき実行
 
@@ -328,6 +328,85 @@ print list. items = 20
 free list. items = 20
 ```
 
+リストの最後の要素を検索し削除
+```
+42201, NagasakiKen, Nagasaki, 429508, 198716, 230792
+42202, NagasakiKen, Sasebo, 255439, 120198, 135241
+42203, NagasakiKen, Shimabara, 45436, 20999, 24437
+42204, NagasakiKen, Isahaya, 138078, 65029, 73049
+42205, NagasakiKen, Omura, 92757, 43938, 48819
+42207, NagasakiKen, Hirado, 31920, 14874, 17046
+42208, NagasakiKen, Matsuura, 23309, 11164, 12145
+42209, NagasakiKen, Tsushima, 31457, 15361, 16096
+42210, NagasakiKen, Iki, 27103, 12860, 14243
+42211, NagasakiKen, Goto, 37327, 17339, 19988
+42212, NagasakiKen, Saikai, 28691, 14032, 14659
+42213, NagasakiKen, Unzen, 44115, 20847, 23268
+42214, NagasakiKen, MinamiShimabara, 46535, 21574, 24961
+42307, NagasakiKen, Nagayo, 42548, 20090, 22458
+42308, NagasakiKen, Togitsu, 29804, 14326, 15478
+42321, NagasakiKen, HigashiSonogi, 8298, 3886, 4412
+42322, NagasakiKen, Kawatana, 14067, 6656, 7411
+42323, NagasakiKen, Hasami, 14891, 7079, 7812
+42383, NagasakiKen, Ojika, 2560, 1172, 1388
+42391, NagasakiKen, Sasa, 13626, 6426, 7200
+42411, NagasakiKen, ShinKamigoto, 19718, 9197, 10521
+===== Start Printing =====
+42411, NagasakiKen, ShinKamigoto, 19718, 9197, 10521
+42391, NagasakiKen, Sasa, 13626, 6426, 7200
+42383, NagasakiKen, Ojika, 2560, 1172, 1388
+42323, NagasakiKen, Hasami, 14891, 7079, 7812
+42322, NagasakiKen, Kawatana, 14067, 6656, 7411
+42321, NagasakiKen, HigashiSonogi, 8298, 3886, 4412
+42308, NagasakiKen, Togitsu, 29804, 14326, 15478
+42307, NagasakiKen, Nagayo, 42548, 20090, 22458
+42214, NagasakiKen, MinamiShimabara, 46535, 21574, 24961
+42213, NagasakiKen, Unzen, 44115, 20847, 23268
+42212, NagasakiKen, Saikai, 28691, 14032, 14659
+42211, NagasakiKen, Goto, 37327, 17339, 19988
+42210, NagasakiKen, Iki, 27103, 12860, 14243
+42209, NagasakiKen, Tsushima, 31457, 15361, 16096
+42208, NagasakiKen, Matsuura, 23309, 11164, 12145
+42207, NagasakiKen, Hirado, 31920, 14874, 17046
+42205, NagasakiKen, Omura, 92757, 43938, 48819
+42204, NagasakiKen, Isahaya, 138078, 65029, 73049
+42203, NagasakiKen, Shimabara, 45436, 20999, 24437
+42202, NagasakiKen, Sasebo, 255439, 120198, 135241
+42201, NagasakiKen, Nagasaki, 429508, 198716, 230792
+print list. items = 21
+===== Print End =====
+City ID?42201
+the city was found at 20
+42201, NagasakiKen, Nagasaki, 429508, 198716, 230792
+City Name?Nagasaki
+the city was found at 20
+42201, NagasakiKen, Nagasaki, 429508, 198716, 230792
+===== Start Printing =====
+42411, NagasakiKen, ShinKamigoto, 19718, 9197, 10521
+42391, NagasakiKen, Sasa, 13626, 6426, 7200
+42383, NagasakiKen, Ojika, 2560, 1172, 1388
+42323, NagasakiKen, Hasami, 14891, 7079, 7812
+42322, NagasakiKen, Kawatana, 14067, 6656, 7411
+42321, NagasakiKen, HigashiSonogi, 8298, 3886, 4412
+42308, NagasakiKen, Togitsu, 29804, 14326, 15478
+42307, NagasakiKen, Nagayo, 42548, 20090, 22458
+42214, NagasakiKen, MinamiShimabara, 46535, 21574, 24961
+42213, NagasakiKen, Unzen, 44115, 20847, 23268
+42212, NagasakiKen, Saikai, 28691, 14032, 14659
+42211, NagasakiKen, Goto, 37327, 17339, 19988
+42210, NagasakiKen, Iki, 27103, 12860, 14243
+42209, NagasakiKen, Tsushima, 31457, 15361, 16096
+42208, NagasakiKen, Matsuura, 23309, 11164, 12145
+42207, NagasakiKen, Hirado, 31920, 14874, 17046
+42205, NagasakiKen, Omura, 92757, 43938, 48819
+42204, NagasakiKen, Isahaya, 138078, 65029, 73049
+42203, NagasakiKen, Shimabara, 45436, 20999, 24437
+42202, NagasakiKen, Sasebo, 255439, 120198, 135241
+print list. items = 20
+===== Print End =====
+free list. items = 20
+```
+
 リストの検索に失敗し、削除にも失敗
 ```
 42201, NagasakiKen, Nagasaki, 429508, 198716, 230792
@@ -382,4 +461,4 @@ sorry, the city was not found
 Segmentation fault
 ```
 ## 修正履歴
-
+SearchCityByID と SearchCityByName の中の条件を n+1 <= MAX_CITY に変更しリストの最後の要素の検索及び削除が出来るように修正

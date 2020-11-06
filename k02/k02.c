@@ -129,7 +129,7 @@ int SearchCityByName(Node* pList, char* cityName, City* pCity)
     Node* pNode;
 
     pNode = pList;
-    for(n=0; pNode->pNext != NULL; n++){
+    for(n=0; n+1 <= MAX_CITY; n++){
         if(strcmp(pNode->city.name, cityName) == 0){
             *pCity = pNode->city;
             result = n;
@@ -150,13 +150,13 @@ int SearchCityByID(Node* pList, int ID, City* pCity)
     Node* pNode;
 
     pNode = pList;
-    for(c=0; pNode->pNext != NULL; c++){
+    for(c=0; c+1 <= MAX_CITY; c++){
         if(pNode->city.id == ID){
             *pCity = pNode->city;
             result = c;
             break;
         }
-
+        
         pNode = pNode->pNext;
     }
 
