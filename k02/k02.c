@@ -19,8 +19,8 @@ typedef struct node_data {
 } Node;
 
 #define DEBUG
-//#define CHALLENGE1
-//#define CHALLENGE2
+#define CHALLENGE1
+#define CHALLENGE2
 
 #define SUCCESS 1
 #define ERROR   0
@@ -76,31 +76,91 @@ void PrintList(Node* pTop)
 Node* InsertNewNode(City newCity, Node* pNext)
 {
     //  ここを実装する
+    Node* pNode = malloc(sizeof(Node));
+    pNode->city = newCity;
+    pNode->pNext = pNext;
+    pNext = pNode;
 
+    return pNext;
 }
-
-#ifdef CHALLENGE1
-int DeleteNodeAt(Node** ppNode, int cn)
-{
-    //  チャレンジ問題1
-    //  ここを実装する
-
-}
-#endif
 
 #ifdef CHALLENGE2
-int SearchCityByName(Node* pList, char* cityName, City* pCity)
+int DeleteNodeAt(Node** ppNode, int cn)
 {
     //  チャレンジ問題2
     //  ここを実装する
+    int x=0;
+    Node* pPrev;
+    Node* pNode;
 
+    pNode = *ppNode;
+    if(cn == 0){
+        pPrev = *ppNode;
+        pPrev = pNode->pNext;
+        *ppNode = pPrev;
+
+        free(pNode);
+    }else{
+        while(x != cn){
+            pPrev = pNode;
+            ppNode = &((*ppNode)->pNext);
+            pNode = pNode->pNext;
+            x++;
+        }
+
+        pPrev->pNext = pNode->pNext;
+        free(pNode);
+    }
+
+    if(*ppNode != NULL){
+        return 0;
+    }else{
+        return 1;
+    }
+}
+#endif
+
+#ifdef CHALLENGE1
+int SearchCityByName(Node* pList, char* cityName, City* pCity)
+{
+    //  チャレンジ問題1
+    //  ここを実装する
+    int n, result=-1;
+    Node* pNode;
+
+    pNode = pList;
+    for(n=0; n+1 <= MAX_CITY; n++){
+        if(strcmp(pNode->city.name, cityName) == 0){
+            *pCity = pNode->city;
+            result = n;
+            break;
+        }
+
+        pNode = pNode->pNext;
+    }
+
+    return result;
 }
 #endif
 
 int SearchCityByID(Node* pList, int ID, City* pCity)
 {
     // ここを実装する
+    int c, result=-1;
+    Node* pNode;
 
+    pNode = pList;
+    for(c=0; c+1 <= MAX_CITY; c++){
+        if(pNode->city.id == ID){
+            *pCity = pNode->city;
+            result = c;
+            break;
+        }
+        
+        pNode = pNode->pNext;
+    }
+
+    return result;
 }
 
 int main(void)
@@ -109,7 +169,7 @@ int main(void)
     FILE* fp;
     int key;
 
-    fp = fopen("nagasaki.csv","r");
+    fp = fopen("nagasaki2.csv","r");
     if(fp==NULL){
         fputs("File open error\n",stderr);
         exit(EXIT_FAILURE);
