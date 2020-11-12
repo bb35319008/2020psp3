@@ -10,7 +10,7 @@ char StrKey[] = "wind";
 char* ForceSearch(char text[], char key[])
 {
     //  ここを実装する
-    int i, text_len, key_len, n, cn, x;
+    int i, text_len, key_len, n, cn, x=0;
 
     for(i=0; text[i] != '\0'; i++){
         text_len = i;
@@ -26,7 +26,7 @@ char* ForceSearch(char text[], char key[])
             if(text[cn] == key[n]){
                 x++;
                 if(n == key_len){
-                    goto END;
+                    return &text[i+1];
                 }
             }else{
                 break;
@@ -35,15 +35,12 @@ char* ForceSearch(char text[], char key[])
     }
 
     return NULL;
-
-    END:
-    return &text[i+1];
 }    
 
 char* BMSearch(char text[], char key[])
 {
     //  ここを実装する
-    int i, text_len, key_len, table[256], n, cn, index, x, z;
+    int i, text_len, key_len, table[256], n, cn, index, x, z=0;
 
     for(i=0; text[i] != '\0'; i++){
         text_len = i;
@@ -61,13 +58,13 @@ char* BMSearch(char text[], char key[])
         table[(unsigned char)key[i]] = key_len - i;
     }
 
-    for(i=key_len; i <= text_len; i = i + table[index]){
+    for(i=key_len; i <= text_len; i = i + index){
         for(cn=i; cn >= cn - key_len; cn--){
             n = key_len - z;
             if(text[cn] == key[n]){
                 z++;
                 if(z == key_len + 1){
-                    goto END;
+                    return &text[i - key_len];
                 }
             }else{
                 z = 0;
@@ -75,24 +72,22 @@ char* BMSearch(char text[], char key[])
                 while(n - x >= 0){
                     if(text[cn] == key[n-x]){
                         index = table[(unsigned char)key[n-x]];
-                        goto SKIP;
+                        break;
                     }
                     x++;
                 }
 
+                if(text[cn] == key[n-x]){
+                    break;
+                }
+
                 index = table[0];
                 break;
-
-                SKIP:
-                    break;
             }
         }
     }
 
     return NULL;
-
-    END:
-    return &text[i - key_len];
 }
 
 int main(void)
