@@ -26,9 +26,10 @@ char* ForceSearch(char text[], char key[])
             if(text[cn] == key[n]){
                 x++;
                 if(n == key_len){
-                    return &text[i+1];
+                    return &text[i];
                 }
             }else{
+                x = 0;
                 break;
             }
         }
@@ -40,7 +41,7 @@ char* ForceSearch(char text[], char key[])
 char* BMSearch(char text[], char key[])
 {
     //  ここを実装する
-    int i, text_len, key_len, table[256], n, cn, index, x, z=0;
+    int i, text_len, key_len, table[256], n, cn, shift, z=0;
 
     for(i=0; text[i] != '\0'; i++){
         text_len = i;
@@ -58,7 +59,7 @@ char* BMSearch(char text[], char key[])
         table[(unsigned char)key[i]] = key_len - i;
     }
 
-    for(i=key_len; i <= text_len; i = i + index){
+    for(i=key_len; i <= text_len; i = cn + shift){
         for(cn=i; cn >= cn - key_len; cn--){
             n = key_len - z;
             if(text[cn] == key[n]){
@@ -68,20 +69,10 @@ char* BMSearch(char text[], char key[])
                 }
             }else{
                 z = 0;
-                x = 0;
-                while(n - x >= 0){
-                    if(text[cn] == key[n-x]){
-                        index = table[(unsigned char)key[n-x]];
-                        break;
-                    }
-                    x++;
+                shift = table[(unsigned char)text[cn]];
+                if(cn + shift <= i){
+                    shift = i + 1 - cn;
                 }
-
-                if(text[cn] == key[n-x]){
-                    break;
-                }
-
-                index = table[0];
                 break;
             }
         }

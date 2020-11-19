@@ -57,71 +57,61 @@
 
 28~29: n と key_len が等しいときは以下を実行
 
-29: &text[i+1] を返す
+29: &text[i] を返す
 
 31~32: text[cn] が key[n] と等しくないとき以下を実行
 
-32: ループを抜ける
+32: x に0を代入
 
-37: NULL を返す
+33: ループを抜ける
 
-43: int型の変数 i, text_len, key_len table[256], n, cn, index, x, z を宣言し、z に0を代入
+38: NULL を返す
 
-45~47: i を0とし、text[i] が '\0' でない限り以下を繰り返し実行し i に1を加算
+44: int型の変数 i, text_len, key_len table[256], n, cn, shift, z を宣言し、z に0を代入
 
-46: text_len に i を代入
+46~48: i を0とし、text[i] が '\0' でない限り以下を繰り返し実行し i に1を加算
 
-49~51: i を0とし、key[i] が '\0' でない限り以下を繰り返し実行し i に1を加算
+47: text_len に i を代入
 
-50: key_len に i を代入
+50~52: i を0とし、key[i] が '\0' でない限り以下を繰り返し実行し i に1を加算
 
-53~55: i を0とし、i が 255 以下の時は以下を繰り返し実行し i に1を加算
+51: key_len に i を代入
 
-54: table[i] に key_len + 1 を代入
+54~56: i を0とし、i が 255 以下の時は以下を繰り返し実行し i に1を加算
 
-57~59: i を0とし、key[i] が '\0' でない限り以下を繰り返し実行し i に1を加算
+55: table[i] に key_len + 1 を代入
 
-58: table[(unsigned char)key[i]] に key_len - i を代入
+58~60: i を0とし、key[i] が '\0' でない限り以下を繰り返し実行し i に1を加算
 
-61~88: i を key_len とし、i が text_len 以下の時は以下を繰り返し実行し、i に i + index を代入
+59: table[(unsigned char)key[i]] に key_len - i を代入
 
-62~87: cn を i とし、cn が cn - key_len 以上の時は以下を繰り返し実行し cn から1を引く
+62~79: i を key_len とし、i が text_len 以下の時は以下を繰り返し実行し、i に i + shift を代入
 
-63: n に key_len - z を代入
+63~78: cn を i とし、cn が cn - key_len 以上の時は以下を繰り返し実行し cn から1を引く
 
-64~68: text[cn] が key[n] と等しいとき以下を実行
+64: n に key_len - z を代入
 
-65: z に1を加算
+65~69: text[cn] が key[n] と等しいとき以下を実行
 
-66~68: z が key_len + 1 と等しいとき以下を実行
+66: z に1を加算
 
-67: &text[i - key_len] を返す
+67~69: z が key_len + 1 と等しいとき以下を実行
 
-69~86: text[cn] が key[n] と等しくないとき以下を実行
+68: &text[i - key_len] を返す
 
-70: z に0を代入
+70~77: text[cn] が key[n] と等しくないとき以下を実行
 
-71: x に0を代入
+71: z に0を代入
 
-72~78: n - x が 0 以上の限り以下を繰り返し実行
+72: shift に table[(unsigned char)key[n-x]] を代入
 
-73~76: text[cn] が key[n-x] と等しいとき以下を実行
+73~75: cn + shift が i 以下の時は以下を実行
 
-74: index に table[(unsigned char)key[n-x]] を代入
+74: shift に i + 1 - cn を代入
 
-75: ループを抜ける
+76: ループを抜ける
 
-77: x に1を加算
-
-80~82: text[cn] が key[n-x] が等しいとき以下を実行
-
-81: ループを抜ける
-
-84: index に table[0] を代入
-
-85: ループを抜ける
-
-90: NULL を返す
+81: NULL を返す
 
 ## 出力結果
 
@@ -134,3 +124,7 @@ BM Search. Find keyword at:wind in my hair.
 条件で2回break関数を使えるようにし、また、return を途中に入れることで全ての goto関数、ラベルを削除。
 一部の変数(x, z)に値を与えて計算がうまくいくように修正。
 table[index] を index に修正。
+分かりやすくするためにBM法のずらし量を index から shift に変更。
+力ずく法の返り値を &text[i] に修正し、それでも出力がうまくいくように text[cn] が key[n] と等しくないときに x を0にするように修正。
+BM法で繰り返し処理を用いて text[cn] と key[n-x] をわざわざ比較する必要はなく、最初のテーブルを作った時点で text[cn] だけでずらし量を求めることが出来るようになっているので繰り返し処理を削除して修正。
+ずらし量を table[(unsigned char)text[cn]] に修正し、それを用いて出した比較位置 cn + shift が前の比較位置 i より小さくなり、比較位置が前に戻ることを防ぐために cn + shift が i より小さいときに shift を i + 1 - cn とし、i を i + 1 に出来るように修正。
