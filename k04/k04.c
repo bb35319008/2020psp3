@@ -105,7 +105,7 @@ void QuickSort(City arrayCity[], int left, int right)
     City tmp;
     int pivot, i, j;
 
-    if(left == right){
+    if(left >= right){
         return;
     }
 

@@ -123,7 +123,7 @@ QUickSort
 
 106: int型の変数 pivot, i, j を宣言
 
-108~110: left が right と等しくなる時は以下を実行
+108~110: left が right 以上の時は以下を実行
 
 109: 返す
 
@@ -369,4 +369,4 @@ QUickSort
 ```
 
 ## 修正履歴
-
+ヒープソートの return の条件を left >= right に修正
