@@ -143,13 +143,34 @@ void QuickSort(City arrayCity[], int left, int right)
     }
 }
 
+void ParcialHeap(City arrayCity[], int size, int node);
 
+int i = MAX_CITY;
 
 void HeapSort(City arrayCity[], int size)
 {
     //  チャレンジ問題(1)
     //  ここを実装する
+    int last_node, node;
+    City tmp;
 
+    if(i <= 1){
+        return;
+    }
+
+    last_node = size/2 - 1;
+    for(node = last_node; node >= 0; node--){
+        ParcialHeap(arrayCity, size, node);
+    }
+
+    while(i > 1){
+        tmp = arrayCity[0];
+        arrayCity[0] = arrayCity[i-1];
+        arrayCity[i-1] = tmp;
+        i--;
+
+        HeapSort(arrayCity, i);
+    }
 }
 
 
@@ -157,7 +178,50 @@ void MergeSort(City arrayCity[], int left, int right)
 {
     //  チャレンジ問題2
     //  ここを実装する
+    int mid, i, j, s;
+    City buff[MAX_CITY];
 
+    if(left >= right){
+        return;
+    }
+
+    mid = left + (right - left)/2;
+    MergeSort(arrayCity, left, mid);
+    MergeSort(arrayCity, mid+1, right);
+
+    for(i = left; i <= mid; i++){
+        buff[i] = arrayCity[i];
+    }
+
+    for(j = mid+1; j <= right; j++){
+        buff[j] = arrayCity[j];
+    }
+
+    i = left;
+    j = mid+1;
+    for(s = left; s <= right; s++){
+        if(i > mid){
+            while(s <= right){
+                arrayCity[s] = buff[j];
+                j++;
+                s++;
+            }
+            break;
+        }else if(j > right){
+            while(s <= right){
+                arrayCity[s] = buff[i];
+                i++;
+                s++;
+            }
+            break;
+        }else if (buff[i].liquor <= buff[j].liquor){
+            arrayCity[s] = buff[i];
+            i++;
+        }else{
+            arrayCity[s] = buff[j];
+            j++;
+        }
+    }
 }
 
 int main(void)
@@ -181,10 +245,14 @@ int main(void)
     printf("===== Sorted by seafood =====\n");
     QuickSort(arrayCity, 0, MAX_CITY - 1);
     PrintArray(arrayCity, MAX_CITY);
-   
-//    MergeSort(arrayCity, 0, MAX_CITY - 1);
-//    HeapSort(arrayCity, MAX_CITY);
+
+    printf("===== Sorted by liquor =====\n");
+    MergeSort(arrayCity, 0, MAX_CITY - 1);
     PrintArray(arrayCity, MAX_CITY);
+
+//    printf("===== Sorted by meat =====\n");
+//    HeapSort(arrayCity, MAX_CITY);
+//    PrintArray(arrayCity, MAX_CITY);
 
 
 
@@ -192,4 +260,39 @@ int main(void)
     free(arrayCity);
 
     return 0;
+}
+
+void ParcialHeap(City arrayCity[], int size, int node)
+{
+    int left, right, c;
+    City tmp;
+
+    left = 2*node + 1;
+    right = 2*node + 2;
+
+    if(left > size || (arrayCity[right].meat > arrayCity[node].meat && arrayCity[left].meat > arrayCity[node].meat)){
+        return;
+    }else{
+        if(arrayCity[right].meat < arrayCity[left].meat && arrayCity[right].meat < arrayCity[node].meat){
+            tmp = arrayCity[right];
+            arrayCity[right] = arrayCity[node];
+            arrayCity[node] = tmp;
+            c = right;
+        }
+
+        if(arrayCity[left].meat < arrayCity[right].meat && arrayCity[left].meat < arrayCity[node].meat){
+            tmp = arrayCity[left];
+            arrayCity[left] = arrayCity[node];
+            arrayCity[node] = tmp;
+            c = left;
+        }
+    }
+
+    if(c == right){
+        ParcialHeap(arrayCity, size, right);
+    }
+
+    if(c == left){
+        ParcialHeap(arrayCity, size, left);
+    }
 }
