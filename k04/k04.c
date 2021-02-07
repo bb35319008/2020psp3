@@ -75,18 +75,21 @@ int LoadData(City arrayCity[])
     return cn;
 }
 
+void swap(City *c1, City *c2){
+    City tmp = *c1;
+    *c1 = *c2;
+    *c2 = tmp;
+}
+
 
 void BubbleSort(City arrayCity[], int size)
 {
     //  ここを実装する
-    City tmp;
     int pos, cnt=0;
 
     for(pos=0; pos < size-1; pos++){
         if(arrayCity[pos].total > arrayCity[pos+1].total){
-            tmp = arrayCity[pos];
-            arrayCity[pos] = arrayCity[pos+1];
-            arrayCity[pos+1] = tmp;
+            swap(&arrayCity[pos], &arrayCity[pos+1]);
             cnt++;
         }
     }
@@ -102,7 +105,6 @@ void BubbleSort(City arrayCity[], int size)
 void QuickSort(City arrayCity[], int left, int right)
 {
     //  ここを実装する
-    City tmp;
     int pivot, i, j;
 
     if(left >= right){
@@ -129,21 +131,19 @@ void QuickSort(City arrayCity[], int left, int right)
         }
 
         if(i >= j){
-            tmp = arrayCity[left];
-            arrayCity[left] = arrayCity[j];
-            arrayCity[j] = tmp;
+            swap(&arrayCity[left], &arrayCity[j]);
             QuickSort(arrayCity, left, j-1);
             QuickSort(arrayCity, j+1, right);
         }else{
-            tmp = arrayCity[i];
-            arrayCity[i] = arrayCity[j];
-            arrayCity[j] = tmp;
+            swap(&arrayCity[i], &arrayCity[j]);
             continue;
         }
     }
 }
 
-void ParcialHeap(City arrayCity[], int size, int node);
+void BuildHeap(City arrayCity[], int size);
+
+void PartialHeap(City arrayCity[], int size, int node);
 
 int i = MAX_CITY;
 
@@ -151,25 +151,18 @@ void HeapSort(City arrayCity[], int size)
 {
     //  チャレンジ問題(1)
     //  ここを実装する
-    int last_node, node;
-    City tmp;
 
     if(i <= 1){
         return;
     }
 
-    last_node = size/2 - 1;
-    for(node = last_node; node >= 0; node--){
-        ParcialHeap(arrayCity, size, node);
-    }
+    BuildHeap(arrayCity, size);
 
     while(i > 1){
-        tmp = arrayCity[0];
-        arrayCity[0] = arrayCity[i-1];
-        arrayCity[i-1] = tmp;
+        swap(&arrayCity[0], &arrayCity[i-1]);
         i--;
 
-        HeapSort(arrayCity, i);
+        BuildHeap(arrayCity, size-1);
     }
 }
 
@@ -250,9 +243,9 @@ int main(void)
     MergeSort(arrayCity, 0, MAX_CITY - 1);
     PrintArray(arrayCity, MAX_CITY);
 
-//    printf("===== Sorted by meat =====\n");
-//    HeapSort(arrayCity, MAX_CITY);
-//    PrintArray(arrayCity, MAX_CITY);
+    printf("===== Sorted by meat =====\n");
+    HeapSort(arrayCity, MAX_CITY);
+    PrintArray(arrayCity, MAX_CITY);
 
 
 
@@ -262,10 +255,21 @@ int main(void)
     return 0;
 }
 
-void ParcialHeap(City arrayCity[], int size, int node)
+void BuildHeap(City arrayCity[], int size)
+{
+    int last_node, node;
+
+    last_node = size/2 - 1;
+    for(node = last_node; node >= 0; node--){
+        PartialHeap(arrayCity, size, node);
+    }
+
+    return;
+}
+
+void PartialHeap(City arrayCity[], int size, int node)
 {
     int left, right, c;
-    City tmp;
 
     left = 2*node + 1;
     right = 2*node + 2;
@@ -274,25 +278,21 @@ void ParcialHeap(City arrayCity[], int size, int node)
         return;
     }else{
         if(arrayCity[right].meat < arrayCity[left].meat && arrayCity[right].meat < arrayCity[node].meat){
-            tmp = arrayCity[right];
-            arrayCity[right] = arrayCity[node];
-            arrayCity[node] = tmp;
+            swap(&arrayCity[right], &arrayCity[node]);
             c = right;
         }
 
         if(arrayCity[left].meat < arrayCity[right].meat && arrayCity[left].meat < arrayCity[node].meat){
-            tmp = arrayCity[left];
-            arrayCity[left] = arrayCity[node];
-            arrayCity[node] = tmp;
+            swap(&arrayCity[left], &arrayCity[node]);
             c = left;
         }
     }
 
     if(c == right){
-        ParcialHeap(arrayCity, size, right);
+        PartialHeap(arrayCity, size, right);
     }
 
     if(c == left){
-        ParcialHeap(arrayCity, size, left);
+        PartialHeap(arrayCity, size, left);
     }
 }

@@ -106,7 +106,7 @@ int StackIsEmpty(void)
 void DepthFirstSearch(int size, int matrix[size][size], int start)
 {
     //  ここを実装する
-    int visited[size], i, j;
+    int visited[size], i, j, n=0, c=0, x;
 
     for(i=0; i < size; i++){
         visited[i] = 0;
@@ -115,18 +115,32 @@ void DepthFirstSearch(int size, int matrix[size][size], int start)
     StackInit();
     StackPush(start);
 
-    printf("===== 深さ優先探索で到達した駅 =====\n");
+    printf("===== 深さ優先探索 =====\n");
+    printf("=== ルート ===\n");
     while(StackIsEmpty() == FALSE){
         i = StackPop();
         j = 0;
         if(visited[i] != 1){
             visited[i] = 1;
             PrintStationName(i);
+            n++;
+            if(n != MAX_STATIONS){
+                printf("  ↓  \n");
+            }
+
+            c = 0;
             while(j < size){
                 if(matrix[i][j] != 0){
                     StackPush(j);
+                    c++;
+                    x = j;
                 }
                 j++;
+            }
+
+            if(n != 1 && n != MAX_STATIONS && c == 1){
+                PrintStationName(x);
+                printf("  ↓  \n");
             }
         }
     }
@@ -197,7 +211,7 @@ int QueueIsEmpty()
 void BreadthFirstSearch(int size, int matrix[size][size], int start)
 {
     //  ここを実装する
-    int visited[size], i, j;
+    int visited[size], i, j, n, z, x=0;
 
     for(i=0; i < size; i++){
         visited[i] = 0;
@@ -206,13 +220,27 @@ void BreadthFirstSearch(int size, int matrix[size][size], int start)
     InitQueue();
     EnQueue(start);
 
-    printf("===== 幅優先探索で到達した駅 =====\n");
+    printf("\n===== 幅優先探索 =====\n");
+    printf("=== ルート ===\n");
     while(QueueIsEmpty() == FALSE){
         i = DeQueue();
         j = 0;
         if(visited[i] != 1){
             visited[i] = 1;
+            if(matrix[i][n] == 0 && matrix[n][i] == 0){
+                for(z=0; z < size; z++){
+                    if(matrix[i][z] != 0 && matrix[n][z] != 0){
+                        PrintStationName(z);
+                        printf("  ↓  \n");
+                    }
+                }
+            }
             PrintStationName(i);
+            x++;
+            if(x != MAX_STATIONS){
+                printf("  ↓  \n");
+            }
+            n = i;
             while(j < size){
                 if(matrix[i][j] != 0){
                     EnQueue(j);
@@ -231,7 +259,69 @@ void BreadthFirstSearch(int size, int matrix[size][size], int start)
 int SearchGraphByDijkstra(int start, int goal, int size, int matrix[size][size])
 {
     //  ここを実装する
+    int cost[size], visited[size], i, min_index, j, n, min=INF_COST, c, from[size], index, route[size];
 
+    for(i=0; i < size; i++){
+        cost[i] = INF_COST;
+        visited[i] = 0;
+        from[i] = 0;
+        route[i] = 0;
+    }
+
+    cost[start] = 0;
+    from[start] = -1;
+
+    min_index = start;
+    while(1){
+        min = INF_COST;
+        for(n=0; n < size; n++){
+            if(visited[n] == 0){
+                if(min > cost[n]){
+                    min = cost[n];
+                    min_index = n;
+                    if(min_index == goal){
+                        printf("\n===== ダイクストラ法 =====\n");
+                        printf("=== ルート ===\n");
+                        index = goal;
+                        i = 0;
+                        while(from[index] != -1){
+                            route[i] = index;
+                            index = from[index];
+                            i++;
+                        }
+
+                        for(i=size; i >= 0; i--){
+                            if(route[i] != 0){
+                                if(route[i] == -1){
+                                    route[i] = 0;
+                                }
+
+                                PrintStationName(route[i]);
+                                if(i != 0){
+                                    printf("  ↓  \n");
+                                }
+                            }
+                        }
+                        return cost[min_index];
+                    }
+                }
+            }
+        }
+
+        visited[min_index] = 1;
+
+        for(j=0; j < size; j++){
+            if(matrix[min_index][j] != 0){
+                if(visited[j] == 0){
+                    c = cost[min_index] + matrix[min_index][j];
+                    if(cost[j] > c){
+                        cost[j] = c;
+                        from[j] = min_index;
+                    }
+                }
+            }
+        }
+    }
 }
 
 
